@@ -1,0 +1,17 @@
+/data/intermediate
+/manuscript
+/FUNGuild
+/picrust2_full_pipeline
+/output
+/etc
+/test
+/data/raw/*fastq.gz
+/data/raw/ZymoBIOMICS*
+/data/raw/ZymoBIOMICS
+/data/raw/*RData
+/data/raw/D6320*
+todo.txt
+*DS_Store
+.Rproj.user*
+.Rproj.user
+/code/00.create_metadata_cpRawReads.R
