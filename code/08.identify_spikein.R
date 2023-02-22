@@ -22,6 +22,7 @@ spikeits <-
   prune_samples(samples = "mcs168") %>%
   ps_filter_prevalence(abundance_threshold = 1) %>%
   tax_glom("genus") %>%
+  subset_taxa(genus %in% "Yarrowia") %>%
   psmelt()
 
 # save results
