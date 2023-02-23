@@ -52,5 +52,5 @@ ps16s_ktu_filt_rel <-
                 ps_filter_prevalence(prevalence_threshold = 2)
 
 #save filtered phyloseq
-saveRDS(ps16sktu_filt, "data/intermediate/ps16sktu_filt.rds")
+saveRDS(ps16sktu_filt, "data/intermediate/ps16s_ktu_filt.rds")
 saveRDS(ps16s_ktu_filt_rel, "data/intermediate/ps16s_ktu_filt_rel.rds")
