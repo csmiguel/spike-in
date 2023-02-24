@@ -1,6 +1,6 @@
 ps_filter_contaminants <- function(ps = NULL, blanks = NULL, excl = NULL) {
-  # ps is a phyloseq object
-  # blank is a regex pattern matching blanks
+  #ps is a phyloseq object
+  #blank is a regex pattern matchin blanks
   # excl, is a vector with samples to exclude from decontam calculations
   require(decontam)
   require(phyloseq)

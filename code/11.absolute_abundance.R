@@ -97,56 +97,44 @@ saveRDS(abs_abundances, "data/intermediate/abs_abundances.rds")
 
 rm(ps16s); rm(psITS)
 # load filtered phyloseq with no blanks and no internal controls
+# turn into proportions.
 ps16s <-
-  readRDS("data/intermediate/ps16s_ktu_filt_rel.rds")
+  readRDS("data/intermediate/ps16s_ktu_filt_rel.rds") %>%
+  phyloseq::transform_sample_counts(function(x) x / sum(x))
 psITS <-
-  readRDS("data/intermediate/psITS_ktu_filt_rel.rds")
+  readRDS("data/intermediate/psITS_ktu_filt_rel.rds") %>%
+  phyloseq::transform_sample_counts(function(x) x / sum(x))
 # remove spike-in sample
 ab_ab <-
   abs_abundances %>%
   dplyr::filter(sample != "mcs168")
 
-# NO CORRECTION for taxon-specific copy number is applied
-# 16S
-# create vector with size factors and order as sample names
-# the result after correction will be the number of 16 copies in 1g of soil
-size_factors16s_gsoil <- {
-  m <- match(sample_names(ps16s), ab_ab$sample)
-  # ratio copies in soil sample respect to reads
-  r <- ab_ab$wild_16s_gsoil_av[m] / ab_ab$wild_reads_16s[m]
-}
-
-# ITS
-# create vector with size factors and order as sample names
-# wild_copies / wild_reads: the result after correction will be the number of ITS-yarrowia equivalent copies in 1g of soil.
-size_factorsITS_gsoil <- {
-  m <- match(sample_names(psITS), ab_ab$sample)
-  # ratio copies in soil sample respect to reads
-  r <- ab_ab$wild_ITScell_gsoil[m] / ab_ab$wild_reads_its[m]
-}
-
-### 4. muliply otu table by scaling factors #####
+# NO CORRECTION for taxon-specific copy number is applied: it is assumed that the
+# copy number of the marker is the same in the spike-in and species in the sample.
+### 4. multiply rel otu table by total biological units in sample #####
 # 16S
 # multiply the counts in sample n by size_factors[n] and save in matrix `mat`
+assertthat::assert_that(all(rownames(otu_table(ps16s)) == ab_ab$sample),
+                        msg = "check names")
 mat16s <-
-  sweep(otu_table(ps16s), 1 + taxa_are_rows(ps16s), size_factors16s_gsoil, FUN = "*")
-# Note, the result is a plain matrix and not an `otu_table` object
+  sweep(otu_table(ps16s), 1 + taxa_are_rows(ps16s), ab_ab$wild_16s_gsoil_av, FUN = "*")
 
 # Make a new phyloseq object with the transformed counts
 ps16s_abs <- ps16s
-otu_table(ps16s_abs) <- otu_table(mat16s, taxa_are_rows = taxa_are_rows(ps16s))
+otu_table(ps16s_abs) <- otu_table(mat16s, taxa_are_rows = taxa_are_rows(ps16s)) %>% round()
 
 # ITS
 # multiply the counts in sample n by size_factors[n] and save in matrix `mat`
+assertthat::assert_that(all(rownames(otu_table(psITS)) == ab_ab$sample),
+                        msg = "check names")
 matits <-
-  sweep(otu_table(psITS), 1 + taxa_are_rows(psITS), size_factorsITS_gsoil, FUN = "*")
+  sweep(otu_table(psITS), 1 + taxa_are_rows(psITS), ab_ab$wild_ITScell_gsoil, FUN = "*")
 # Note, the result is a plain matrix and not an `otu_table` object
 
 # Make a new phyloseq object with the transformed counts
 psITS_abs <- psITS
-otu_table(psITS_abs) <- otu_table(matits, taxa_are_rows = taxa_are_rows(psITS))
+otu_table(psITS_abs) <- otu_table(matits, taxa_are_rows = taxa_are_rows(psITS)) %>% round()
 
 # save phyloseq object with corrected absolute counts
 saveRDS(ps16s_abs, "data/intermediate/ps16s_abs.rds")
 saveRDS(psITS_abs, "data/intermediate/psITS_abs.rds")
-
