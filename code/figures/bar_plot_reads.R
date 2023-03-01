@@ -14,7 +14,8 @@ obs_bact <- obs %>%
 obs_fung <- obs %>%
   filter(nature %in% c("wild_reads_its", "yarrowia_reads"))
 
-ggplot() +
+p1 <-
+  ggplot() +
   geom_col(data = obs_bact,  aes(x = sample, y = -reads, fill = nature), position="stack") +
   geom_col(data = obs_fung,  aes(x = sample, y = reads, fill = nature), position="stack") +
   geom_vline(xintercept = 0) +
@@ -22,3 +23,6 @@ ggplot() +
   coord_flip() +
   theme_classic() +
   theme(legend.title = element_blank())
+ggsave("output/fig_barplot_reads.pdf", p1,
+       width = 8,
+       height = 4)
