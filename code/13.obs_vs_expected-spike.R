@@ -6,7 +6,7 @@ source("code/functions/kt_expected.R")
 # proportion of observed spikein reads respect to total
 obs <-
   readRDS("data/intermediate/abs_abundances.rds") %>%
-  select(sample, code, spikein,
+  select(sample, code, spikein, soil_mg,
          total_reads_16s, total_reads_its, imte_reads,
          allo_reads, yarrowia_reads) %>%
   mutate(obs_allo = allo_reads / total_reads_16s,
@@ -45,17 +45,18 @@ obs_vs_exp <-
     
   } %>%
   mutate( # impute s0 data for NAs
-    s0 = ifelse(
+    totals0 = ifelse(
       is.na(s0) & marker == "16s",
       mean(
-        pull(filter(., marker == "16s" & !is.na(s0)), s0)
+        pull(filter(., marker == "16s" & !is.na(s0)), totals0)
       ),
       ifelse(
         is.na(s0) & marker == "its",
         mean(
-          pull(filter(., marker == "its" & !is.na(s0)), s0)
+          pull(filter(., marker == "its" & !is.na(s0)), totals0)
         )
-        ,s0)),
+        ,totals0)),
+    s0 = ifelse(is.na(s0), totals0 * soil_mg /ds / 1000, s0),
     # because the Kvf contained a mix of the its and 16s spikeins
     spikein = ifelse(marker == "16s", spikein * 5 / 7,
                      ifelse(marker == "its", spikein * 2 / 7, NA)),
