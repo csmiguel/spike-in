@@ -1,4 +1,4 @@
-# plot expected versus observed proportion of spikein
+# compute expected versus observed proportion of spikein
 library(tidyverse)
 source("code/functions/kt_expected.R")
 

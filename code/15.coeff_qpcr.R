@@ -1,3 +1,4 @@
+# compute coefficient of variations between qPCR replicas
 library(tidyverse)
 
 # qpcr data
@@ -27,10 +28,9 @@ qpcr <-
       )
     select(x, -marker)
   })
-# transform t1
+# transform
 samples_temp <-
   readRDS("data/intermediate/samples.rds") %>%
-  tibble::rownames_to_column("dna_ext") %>%
   select(code, sample)
 
 # format t2

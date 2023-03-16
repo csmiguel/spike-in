@@ -15,7 +15,6 @@ abs <-
 # sample codes
 sample_codes <-
   readRDS("data/intermediate/samples.rds") %>%
-  tibble::rownames_to_column("dna_ext") %>%
   select(code, sample)
 
 # join data
@@ -82,3 +81,7 @@ xlsx::write.xlsx(bact_data, row.names = T,
                  "output/sm3.xlsx", sheetName = "16s", append = T)
 xlsx::write.xlsx(its_data, row.names = F,
                  "output/sm3.xlsx", sheetName = "ITS", append = T)
+# save dfs
+saveRDS(list(bact = bact_data,
+             its = its_data),
+        "data/intermediate/sm3.rds")

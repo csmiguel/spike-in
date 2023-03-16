@@ -15,8 +15,12 @@ p1 <-
  obs_vs_exp %>%
   ggplot() +
   geom_jitter(aes(x = spikein_id, y = log2foldchange(obs_prop, kt_exp),
-                  color = as.character(qpcr)), alpha = 0.7,
-              width = 0.2) +
+                  color = as.character(qpcr),
+              #    shape = as.character(qpcr)
+              ),
+              alpha = 0.7,
+              width = 0.2,
+              size = 4) +
   geom_abline(intercept = 0, slope = 0, linetype = 2, linewidth = 0.5, color = "grey") +
   ylab("Log2 fold change of observed/expected reads") +
   xlab("")
@@ -27,7 +31,7 @@ p2 <-
                    labels=c("Allobacillus\nhalotolerans (16S)",
                             "Imtechella\nhalotolerans (16S)",
                             "Yarrowia\nlipolytica (ITS2)")) +
-  scale_color_manual(values = c("grey60", "grey30"),
+  scale_color_manual(values = c("grey70", "grey20"),
                      labels = c("extrapolated estimations","real estimations")) +
   theme_classic() +
   theme(legend.title = element_blank(),
