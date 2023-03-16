@@ -16,7 +16,11 @@ ktuITS <-
   select(lib, Observed, Shannon)
 
 alphadiv <- list(ktu16s = ktu16s,
-                 ktuITS = ktuITS)
+                 ktuITS = ktuITS) %>%
+  do.call(what = "cbind") %>%
+  select(-ktuITS.lib) %>%
+  rename(lib = ktu16s.lib) %>%
+  mutate_at(vars(contains("Shannon")), .funs = round, 2)
 
 # save objects
 saveRDS(alphadiv,
