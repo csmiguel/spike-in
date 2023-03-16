@@ -31,12 +31,12 @@ plot(pro1, kind = 1, type = "p")
 dev.off()
 
 # test signficance
-pro1_test <-
+protest_16s <-
   protest(X = bray_16s_abs$vectors[,1:2],
         Y = bray_16s_rel$vectors[,1:2],
         scores = "sites", permutations = 999)
 
-# `plot histogram with distances
+# plot histogram with distances
 bray_abs <- phyloseq::distance(ps16s_abs, method ="bray")
 bray_rel <- phyloseq::distance(ps16s_rel, method ="bray")
 dists <- bray_abs - bray_rel
@@ -73,15 +73,23 @@ plot(pro1, kind = 1, type = "p")
 dev.off()
 
 # test signficance
-pro1_test <-
+protest_its <-
   protest(X = bray_its_abs$vectors[,1:2],
           Y = bray_its_rel$vectors[,1:2],
           scores = "sites", permutations = 999)
 
-# `plot histogram with distances
+# plot histogram with distances
 bray_abs <- phyloseq::distance(psits_abs, method ="bray")
 bray_rel <- phyloseq::distance(psits_rel, method ="bray")
 dists <- bray_abs - bray_rel
 pdf(file = "output/hist_bray_dist_its.pdf", width = 5, height = 4)
 hist(dists, main = "bray abs - bray rel")
 dev.off()
+
+# print protest results to text file
+sink("output/protest.txt")
+cat("\nProtest 16s\n")
+protest_16s
+cat("\n\nProtest ITS\n\n")
+protest_its
+sink()
