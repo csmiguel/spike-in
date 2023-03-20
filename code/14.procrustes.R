@@ -4,12 +4,24 @@ library(phyloseq)
 library(vegan)
 
 # 16s
-# load phyloseq with absolute counts
-ps16s_abs <-
+# absolute counts
+ps16s_abstemp <-
   readRDS("data/intermediate/ps16s_abs.rds")
-ps16s_rel <-
-  readRDS("data/intermediate/ps16s_ktu_filt_rel.rds")
+# geometric mean of absolute counts
+geomM_bact <-
+  sample_sums(ps16s_abstemp) %>%
+  {exp(mean(log(.)))}
+ps16s_abs <-
+  ps16s_abstemp %>%
+  transform_sample_counts(function(x) log(1 + x))
 
+# relative
+ps16s_rel <-
+  readRDS("data/intermediate/ps16s_ktu_filt_rel.rds") %>%
+  transform_sample_counts(function(x) x / sum(x)) %>% # proportions
+  transform_sample_counts(function(x) x * geomM_bact) %>%
+  transform_sample_counts(function(x) log(1 + x))
+    
 # MDS with weighted UNIFRAC distances
 bray_16s_abs <-
   phyloseq::ordinate(ps16s_abs,
@@ -46,11 +58,23 @@ hist(dists, main = "bray abs - bray rel")
 dev.off()
 
 # its
-# load phyloseq with absolute counts
-psits_abs <-
+# absolute counts
+psits_abstemp <-
   readRDS("data/intermediate/psITS_abs.rds")
+  # geometric mean of absolute counts
+geomM_its <<-
+  sample_sums(psits_abstemp) %>%
+  {exp(mean(log(.)))}
+psits_abs <-
+  psits_abstemp %>%
+  transform_sample_counts(function(x) log(1 + x))
+ 
+# relative quantification
 psits_rel <-
-  readRDS("data/intermediate/psITS_ktu_filt_rel.rds")
+  readRDS("data/intermediate/psITS_ktu_filt_rel.rds") %>%
+  transform_sample_counts(function(x) x / sum(x)) %>% # proportions
+  transform_sample_counts(function(x) x * geomM_its) %>%
+  transform_sample_counts(function(x) log(1 + x))
 
 # MDS with weighted UNIFRAC distances
 bray_its_abs <-
@@ -93,3 +117,4 @@ protest_16s
 cat("\n\nProtest ITS\n\n")
 protest_its
 sink()
+
