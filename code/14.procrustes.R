@@ -1,4 +1,4 @@
-# mds plot from bray-curtis
+# procrustes analysis to compare relative versus absolute counts
 library(tidyverse)
 library(phyloseq)
 library(vegan)
