@@ -1,0 +1,13 @@
+#$ -S /bin/bash
+#$ -N asv_determination
+#$ -wd /home/mcamacho/spike-in
+#$ -o asv_determination.salida
+#$ -e asv_determination.err
+#$ -q diaria_multicore
+#$ -pe smp 2-8
+#$ -l virtual_free=16G
+#$ -R y
+export OMP_NUM_THREADS=$NSLOTS
+module load R-4.0.3-Bioconductor
+R --slave --no-save < /home/mcamacho/spike-in/6.assign_taxonomy_cica.R
+
