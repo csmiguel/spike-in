@@ -1,0 +1,11 @@
+The determination of chimeric sequences is based on UCHIME2
+results. See more information here:
+https://www.ncbi.nlm.nih.gov/genbank/rrnachimera/
+
+Sequence-ID	Chimera Score
+ASV1020	1.2403
+ASV1293	1.0539
+ASV1346	1.0550
+ASV6636	1.1958
+ASV8197	1.1533
+ASV8995	2.5351

@@ -1,4 +1,6 @@
-/data/intermediate
+/data/intermediate/*
+!data/intermediate/ps16s_abs.rds
+!data/intermediate/psITS_abs.rds
 /manuscript
 /FUNGuild
 /picrust2_full_pipeline
