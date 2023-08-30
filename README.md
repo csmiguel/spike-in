@@ -4,4 +4,4 @@ Miguel Camacho-Sanchez (2023) *A new spike-in-based method for quantitative meta
 
 preprint at: https://doi.org/10.21203/rs.3.rs-2885222/v1
 
-*phyloseq* objects in (data/intermediate)[data/intermediate/].
+*phyloseq* objects in [data/intermediate](data/intermediate/).
